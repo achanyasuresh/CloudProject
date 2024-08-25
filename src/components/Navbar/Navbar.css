@@ -1,0 +1,28 @@
+/* src/Navbar.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: #282c34;
+    padding: 1rem;
+    color: white;
+  }
+  
+  .navbar-left a,
+  .navbar-right a {
+    margin-right: 1rem;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .navbar-right a {
+    margin-left: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #61dafb;
+    border-radius: 4px;
+    text-align: center;
+  }
+  
+  .navbar-right a:hover {
+    background-color: #21a1f1;
+  }
+  
