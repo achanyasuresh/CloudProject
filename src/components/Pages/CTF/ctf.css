@@ -1,0 +1,94 @@
+/* CtfList.css */
+
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .ctf-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  /* Button Styles */
+  .ctf-add-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .ctf-add-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* List Styles */
+  .ctf-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+  
+  .ctf-list-item {
+    background-color: #e9ecef;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .ctf-list-item:hover {
+    transform: scale(1.02);
+  }
+  
+  .ctf-event-details {
+    flex: 1;
+  }
+  
+  .ctf-event-details h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #007bff;
+  }
+  
+  .ctf-event-details p {
+    margin: 5px 0 0;
+    color: #555;
+  }
+  
+  /* Participate Button Styles */
+  .ctf-participate-button {
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .ctf-participate-button:hover {
+    background-color: #218838;
+  }
+  

@@ -9,6 +9,8 @@ import EventList from './components/Pages/EventList/EventList';
 import EventDetails from './components/Pages/EventDetails/EventDetails';
 import Home from './components/Pages/Home/Home';
 import GroupMembers from './components/Pages/GroupMembers/GroupMembers';
+import CTF from './components/Pages/CTF/ctf';
+import CtfParticipation from './components/Pages/CTF/CtfParticipation';
 import './App.css';
 
 function App() {
@@ -22,8 +24,11 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/add-member" element={<AddGroup />} />
           <Route path="/list-member" element={<GroupMembers />} />
+          <Route path="/ctf" element={<CTF />} />
+          <Route path="/participate/:id" element={<CtfParticipation />} />
           <Route path="/events" element={<EventList />} />
           <Route path="/events/:id" element={<EventDetails />} />
+
           {/* Add more routes as needed */}
         </Routes>
       </div>

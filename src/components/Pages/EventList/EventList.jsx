@@ -6,7 +6,7 @@ import './EventList.css';
 
 const EventList = () => {
   const navigate = useNavigate();
-  const isAuthenticated = !!localStorage.getItem('token'); // Check if user is authenticated
+  // const isAuthenticated = !!localStorage.getItem('token'); // Check if user is authenticated
 
   const events = [
     { id: 1, name: 'Hackathon Challenge 1', details: 'Build a full-stack web application within 48 hours.' },
@@ -15,14 +15,14 @@ const EventList = () => {
   ];
 
   const handleParticipateClick = (eventId) => {
-    if (isAuthenticated) {
+    // if (isAuthenticated) {
       // Redirect to the event page if authenticated
       navigate(`/events/${eventId}`);
-    } else {
+    // } else {
       // Show toast message and redirect to login page if not authenticated
-      toast.warning('Please log in to participate.');
-      navigate('/login');
-    }
+      // toast.warning('Please log in to participate.');
+      // navigate('/login');
+    // }
   };
 
   return (
@@ -47,3 +47,4 @@ const EventList = () => {
 };
 
 export default EventList;
+

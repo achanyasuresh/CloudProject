@@ -12,6 +12,7 @@ const Navbar = () => {
         <Link to="/events">Events</Link>
         <Link to="/add-member">Add Group</Link>
         <Link to="/list-member">Group Members</Link>
+        <Link to="/ctf">CTF</Link>
       </div>
       <div className="navbar-right">
         <Link to="/login">Login</Link>
