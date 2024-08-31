@@ -4,6 +4,7 @@ import './EventDetails.css';
 const EventDetails = () => {
   const [file, setFile] = useState(null);
 
+  console.log("file", file)
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };

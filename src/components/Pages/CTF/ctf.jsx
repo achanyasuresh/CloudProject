@@ -10,7 +10,7 @@ const CtfList = () => {
 
   const navigate = useNavigate();
   
-
+console.log("a", setCtfEvents)
   const handleParticipateClick = (eventId) => {
     navigate(`/participate/${eventId}`);  // Navigate to participation page with the event ID
   };
