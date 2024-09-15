@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './GroupMembers.css';
 
 const GroupMembers = () => {
-  // Initial group members data (this would typically come from an API)
   const [members, setMembers] = useState([
     { id: 1, name: 'John Doe', role: 'Developer' },
     { id: 2, name: 'Jane Smith', role: 'Designer' },
@@ -11,11 +10,13 @@ const GroupMembers = () => {
 
   const [editMode, setEditMode] = useState(null); // Track which member is being edited
   const [editData, setEditData] = useState({ name: '', role: '' }); // Store edit form data
+  const [errors, setErrors] = useState({ name: '', role: '' }); // Validation error messages
 
   // Handle input changes in the edit form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditData((prevData) => ({ ...prevData, [name]: value }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: '' })); // Clear error on input change
   };
 
   // Handle editing a member
@@ -25,8 +26,17 @@ const GroupMembers = () => {
     setEditMode(id);
   };
 
-  // Handle saving the edited member details
+  // Handle saving the edited member details with validation
   const handleSave = (id) => {
+    if (!editData.name.trim()) {
+      setErrors((prevErrors) => ({ ...prevErrors, name: 'Name cannot be empty.' }));
+      return;
+    }
+    if (!editData.role.trim()) {
+      setErrors((prevErrors) => ({ ...prevErrors, role: 'Role cannot be empty.' }));
+      return;
+    }
+
     setMembers((prevMembers) =>
       prevMembers.map((member) =>
         member.id === id ? { ...member, name: editData.name, role: editData.role } : member
@@ -56,26 +66,32 @@ const GroupMembers = () => {
             <tr key={member.id}>
               <td>
                 {editMode === member.id ? (
-                  <input
-                    type="text"
-                    name="name"
-                    value={editData.name}
-                    onChange={handleInputChange}
-                    className="edit-input"
-                  />
+                  <>
+                    <input
+                      type="text"
+                      name="name"
+                      value={editData.name}
+                      onChange={handleInputChange}
+                      className="edit-input"
+                    />
+                    {errors.name && <span className="error">{errors.name}</span>}
+                  </>
                 ) : (
                   member.name
                 )}
               </td>
               <td>
                 {editMode === member.id ? (
-                  <input
-                    type="text"
-                    name="role"
-                    value={editData.role}
-                    onChange={handleInputChange}
-                    className="edit-input"
-                  />
+                  <>
+                    <input
+                      type="text"
+                      name="role"
+                      value={editData.role}
+                      onChange={handleInputChange}
+                      className="edit-input"
+                    />
+                    {errors.role && <span className="error">{errors.role}</span>}
+                  </>
                 ) : (
                   member.role
                 )}

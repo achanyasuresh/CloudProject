@@ -1,20 +1,115 @@
-import React from 'react'
+import React, { useState } from 'react';
 
 const Register = () => {
+  const [formValues, setFormValues] = useState({ username: '', email: '', password: '' });
+  const [errors, setErrors] = useState({ username: '', email: '', password: '' });
+
+  // Regular expressions for validation
+  const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+
+    // Validate as user types
+    validateField(name, value);
+  };
+
+  const validateField = (name, value) => {
+    let error = '';
+
+    switch (name) {
+      case 'username':
+        if (!value.trim()) {
+          error = 'Username is required';
+        }
+        break;
+      case 'email':
+        if (!emailRegex.test(value)) {
+          error = 'Enter a valid email address';
+        }
+        break;
+      case 'password':
+        if (!strongPasswordRegex.test(value)) {
+          error =
+            'Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character (e.g., @$!%*?&)';
+        }
+        break;
+      default:
+        break;
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Validate all fields before submitting
+    const { username, email, password } = formValues;
+    if (!username || !email || !password || errors.username || errors.email || errors.password) {
+      validateField('username', username);
+      validateField('email', email);
+      validateField('password', password);
+      return;
+    }
+
+    console.log('Form submitted:', formValues);
+    setFormValues({ username: '', email: '', password: '' });
+    setErrors({ username: '', email: '', password: '' });
+  };
+
   return (
     <div className="form-container">
-    <h2>Register</h2>
-    <form>
-      <label htmlFor="username">Username:</label>
-      <input type="text" id="username" placeholder="Enter your username" required />
-      <label htmlFor="email">Email:</label>
-      <input type="email" id="email" placeholder="Enter your email" required />
-      <label htmlFor="password">Password:</label>
-      <input type="password" id="password" placeholder="Enter your password" required />
-      <button type="submit">Register</button>
-    </form>
-  </div>
-  )
-}
+      <h2>Register</h2>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="username">Username:</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          value={formValues.username}
+          onChange={handleChange}
+          placeholder="Enter your username"
+          required
+        />
+        {errors.username && <span className="error">{errors.username}</span>}
 
-export default Register
+        <label htmlFor="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={formValues.email}
+          onChange={handleChange}
+          placeholder="Enter your email"
+          required
+        />
+        {errors.email && <span className="error">{errors.email}</span>}
+
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={formValues.password}
+          onChange={handleChange}
+          placeholder="Enter your password"
+          required
+        />
+        {errors.password && <span className="error">{errors.password}</span>}
+
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  );
+};
+
+export default Register;
