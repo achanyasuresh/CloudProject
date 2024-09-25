@@ -1,5 +1,8 @@
 // src/App.js
 import React from 'react';
+
+import cors from 'cors'
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbr';
 import Login from './components/Pages/Login/Login';
@@ -11,6 +14,7 @@ import Home from './components/Pages/Home/Home';
 import GroupMembers from './components/Pages/GroupMembers/GroupMembers';
 import CTF from './components/Pages/CTF/ctf';
 import CtfParticipation from './components/Pages/CTF/CtfParticipation';
+import Account from './components/Pages/Account/Account'
 import './App.css';
 
 function App() {
@@ -28,6 +32,7 @@ function App() {
           <Route path="/participate/:id" element={<CtfParticipation />} />
           <Route path="/events" element={<EventList />} />
           <Route path="/events/:id" element={<EventDetails />} />
+          <Route path="/account" element={<Account />} />
 
           {/* Add more routes as needed */}
         </Routes>
