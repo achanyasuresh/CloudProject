@@ -7,7 +7,7 @@ const Group = () => {
     const [groupDetails, setGroupDetails] = useState({
         teamName: 'test',
         members: [],
-        files: []
+        group_files: []
     });
 
     useEffect(() => async function() {
