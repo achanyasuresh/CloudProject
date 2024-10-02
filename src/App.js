@@ -11,6 +11,7 @@ import Home from './components/Pages/Home/Home';
 import GroupMembers from './components/Pages/GroupMembers/GroupMembers';
 import CTF from './components/Pages/CTF/ctf';
 import CtfParticipation from './components/Pages/CTF/CtfParticipation';
+import Group from './components/Pages/Group/Group';
 import './App.css';
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
           <Route path="/participate/:id" element={<CtfParticipation />} />
           <Route path="/events" element={<EventList />} />
           <Route path="/events/:id" element={<EventDetails />} />
-
+          <Route path="/group" element={<Group />} />
           {/* Add more routes as needed */}
         </Routes>
       </div>

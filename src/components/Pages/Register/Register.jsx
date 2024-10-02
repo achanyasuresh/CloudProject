@@ -65,7 +65,7 @@ const Register = () => {
 
     // API Call
     try {
-      const response = await fetch('http://' + Constants.BACKEND_IP + '/api/v1/users', {
+      const response = await fetch(Constants.BACKEND_IP + '/api/v1/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -21,6 +21,7 @@ const Navbar = () => {
         <Link to="/">Home</Link>
         <Link to="/events">Events</Link>
         <Link to="/ctf">CTF</Link>
+        <Link to="/group">Group</Link>
       </div>
       <div className="navbar-right">
         {isLoggedIn ? (
