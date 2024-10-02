@@ -39,11 +39,11 @@ const Group = () => {
                 <h2>Team Name: <span id="team-name">Innovators</span></h2>
                 <h3>Members:</h3>
                 <ul id="members-list">
-                    <li>
+                    {/* <li>
                         {groupDetails.teamName}
                         {groupDetails.members}
                         {groupDetails.members.length}
-                    </li>
+                    </li> */}
                     {groupDetails.members.length > 0 ? (
                         groupDetails.members.map((member, index) => (
                             <li key={index}>{member.user_name}</li>
@@ -56,7 +56,7 @@ const Group = () => {
 
             <section className="file-download">
                 <h3>Uploaded Files:</h3>
-                {/* <ul id="file-list">
+                <ul id="file-list">
                 {groupDetails.group_files.length > 0 ? (
                         groupDetails.group_files.map((file, index) => (
                             <li key={index}>{file.file_name}</li>
@@ -64,7 +64,7 @@ const Group = () => {
                     ) : (
                         <li>Loading files...</li>
                     )}
-                </ul> */}
+                </ul>
             </section>
         </div>
     );
