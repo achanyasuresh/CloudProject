@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 const Register = () => {
   const [formValues, setFormValues] = useState({ username: '', email: '', password: '' });
   const [errors, setErrors] = useState({ username: '', email: '', password: '' });
+  const [registerMessage, setRegisterMessage] = useState('');
 
   // Regular expressions for validation
   const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -49,7 +50,7 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate all fields before submitting
@@ -61,9 +62,29 @@ const Register = () => {
       return;
     }
 
-    console.log('Form submitted:', formValues);
-    setFormValues({ username: '', email: '', password: '' });
-    setErrors({ username: '', email: '', password: '' });
+    // API Call
+    try {
+      const response = await fetch('http://44.201.193.200:8080/api/v1/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ user_name: username, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setRegisterMessage('Registration successful!');
+        // Clear form fields
+        setFormValues({ username: '', email: '', password: '' });
+        setErrors({ username: '', email: '', password: '' });
+      } else {
+        setRegisterMessage(data.message || 'Registration failed. Please try again.');
+      }
+    } catch (error) {
+      setRegisterMessage('An error occurred while registering. Please try again later.');
+    }
   };
 
   return (
@@ -108,6 +129,7 @@ const Register = () => {
 
         <button type="submit">Register</button>
       </form>
+      {registerMessage && <div className="register-message">{registerMessage}</div>}
     </div>
   );
 };

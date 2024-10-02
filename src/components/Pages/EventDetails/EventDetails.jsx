@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import './EventDetails.css';
+import { useNavigate } from 'react-router-dom'; // Correct import for useNavigate
+import Modal from './Modal';
+import AddGroup from '../AddGroup/AddGroup';
+import GroupMembers from "../GroupMembers/GroupMembers"
 
 const EventDetails = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     approach: '',
     tools: '',
@@ -15,7 +21,6 @@ const EventDetails = () => {
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    // Check if the file type is allowed and the size is within the limit (e.g., 5MB)
     const allowedFileTypes = ['application/pdf', 'application/msword', 'text/plain'];
     if (selectedFile && !allowedFileTypes.includes(selectedFile.type)) {
       setErrors((prevErrors) => ({
@@ -45,7 +50,6 @@ const EventDetails = () => {
       [name]: value,
     }));
 
-    // Validate fields as the user types
     if (name === 'approach' && value.trim() === '') {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -67,7 +71,6 @@ const EventDetails = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Final validation check before submission
     if (!formData.approach.trim()) {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -87,18 +90,39 @@ const EventDetails = () => {
       }));
     }
 
-    // If no errors, process the form
     if (!errors.approach && !errors.tools && !errors.file && file) {
       alert('File submitted successfully!');
-      // Submit logic can go here, e.g., sending the data to a backend server
       setFormData({ approach: '', tools: '' });
       setFile(null);
     }
   };
+  const handleAddGroupClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleViewGroupClick =() => {
+    setIsModalOpen(true);
+  }
+
+  const handleViewCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
 
   return (
     <div className="event-details">
-      <h2>Event Details</h2>
+      <div className="header">
+        <h2>Event Details</h2>
+        <div className="buttons">
+        <button onClick={handleAddGroupClick}>Add Group Members</button>
+        <button onClick={handleViewGroupClick}>View Group Members</button>
+        {/* <button onClick={() => navigate('/list-member')}>View Members</button> */}
+        </div>
+      </div>
       <p>Please answer the following questions:</p>
       <form onSubmit={handleSubmit}>
         <div className="question">
@@ -130,6 +154,12 @@ const EventDetails = () => {
         </div>
         <button type="submit">Submit</button>
       </form>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <AddGroup />
+      </Modal>
+      <Modal isOpen={isModalOpen} onClose={handleViewCloseModal}>
+        <GroupMembers />
+      </Modal>
     </div>
   );
 };

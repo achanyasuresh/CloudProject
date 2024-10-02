@@ -25,4 +25,27 @@
   .navbar-right a:hover {
     background-color: #21a1f1;
   }
+  .profile-icon {
+    width: 30px; /* Adjust size as needed */
+    height: 30px; /* Adjust size as needed */
+    border-radius: 50%; /* Circular profile icon */
+    margin-left: 10px; /* Spacing between links and icon */
+  }
+  
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between icons/links */
+  }
+  
+  .profile-icon, .logout-icon {
+    cursor: pointer; /* Change cursor on hover */
+    font-size: 30px; /* Adjust size */
+    color: #007bff; /* Color for icons */
+    transition: color 0.3s; /* Smooth color transition */
+  }
+  
+  .profile-icon:hover, .logout-icon:hover {
+    color: #0056b3; /* Darker color on hover */
+  }
   
