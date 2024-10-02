@@ -21,7 +21,7 @@ const Group = () => {
                     }
                 });
                 const data = await response.json();
-                console.log("The response: " + data);
+                console.log("The response: " + JSON.stringify(data));
                 setGroupDetails(data[0]);
             } catch (error) {
                 console.log("The error: " + error.stack);
