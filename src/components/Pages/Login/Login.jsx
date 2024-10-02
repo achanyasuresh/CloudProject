@@ -4,6 +4,8 @@ import 'react-toastify/dist/ReactToastify.css'; // Import toastify styles
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 
+import * as Constants from '../../../helpers/constants';
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -42,7 +44,7 @@ const Login = () => {
     if (isValid) {
       // Proceed with login API call
       try {
-        const response = await fetch('http://44.201.193.200:8080/api/v1/authenticate/login', {
+        const response = await fetch('http://' + Constants.BACKEND_IP + '/api/v1/authenticate/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
