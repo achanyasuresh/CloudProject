@@ -1,1 +1,1 @@
-export const BACKEND_IP = '44.210.137.95:8080';
+export const BACKEND_IP = 'http://load-balancer-hackathon-385661405.us-east-1.elb.amazonaws.com';

@@ -15,7 +15,7 @@ const Group = () => {
             console.log("fetching group info");
             // Replace with your API endpoint
             try {
-                const response = await fetch('http://44.210.137.95:8080/api/v1/group?groupId=8cb5f266-0225-4c18-9dfb-49d18e4ce261', {
+                const response = await fetch('' + Constants.BACKEND_IP + '/api/v1/group?groupId=8cb5f266-0225-4c18-9dfb-49d18e4ce261', {
                     headers: {
                         "X_H_ACCESS_KEY_HEADER": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3Mjc0Mjc2MTR9.4ZfNFNP4-87RDnvdhbD0o5eUzYjCvcRAvdYppu3jJGY"
                     }
