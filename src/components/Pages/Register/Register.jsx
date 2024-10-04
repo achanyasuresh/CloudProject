@@ -64,7 +64,7 @@ const Register = () => {
 
     // API Call
     try {
-      const response = await fetch('http://44.201.193.200:8080/api/v1/users', {
+      const response = await fetch('http://52.207.243.255:8080/api/v1/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

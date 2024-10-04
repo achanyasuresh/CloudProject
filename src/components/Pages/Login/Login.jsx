@@ -42,7 +42,7 @@ const Login = () => {
     if (isValid) {
       // Proceed with login API call
       try {
-        const response = await fetch('http://44.201.193.200:8080/api/v1/authenticate/login', {
+        const response = await fetch('http://52.207.243.255:8080/api/v1/authenticate/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
