@@ -65,7 +65,7 @@ const Register = () => {
 
     // API Call
     try {
-      const response = await fetch(Constants.BACKEND_IP + '/api/v1/users', {
+      const response = await fetch('http://load-balancer-hackathon-385661405.us-east-1.elb.amazonaws.com/api/v1/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,6 +74,7 @@ const Register = () => {
       });
 
       const data = await response.json();
+      console.log("response ", data)
 
       if (response.ok) {
         setRegisterMessage('Registration successful!');

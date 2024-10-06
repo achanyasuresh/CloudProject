@@ -1,23 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './EventDetails.css';
-import { useNavigate } from 'react-router-dom'; // Correct import for useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import Modal from './Modal';
 import AddGroup from '../AddGroup/AddGroup';
-import GroupMembers from "../GroupMembers/GroupMembers"
+import GroupMembers from "../GroupMembers/GroupMembers";
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const EventDetails = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    approach: '',
-    tools: '',
-  });
+  const navigate = useNavigate();
+  const [activeModal, setActiveModal] = useState(null);
+  const [groupId, setGroupId] = useState(null);
+  
+ 
   const [file, setFile] = useState(null);
   const [errors, setErrors] = useState({
-    approach: '',
-    tools: '',
     file: '',
   });
+
+  useEffect(() => {
+    const storedGroupId = localStorage.getItem('groupid');
+    if (storedGroupId) {
+      try {
+        const parsedGroupId = JSON.parse(storedGroupId);
+        if (Array.isArray(parsedGroupId) && parsedGroupId.length > 0) {
+          setGroupId(parsedGroupId[0]); // Set only the first group ID
+          console.log("groupId:", parsedGroupId[0]); // Log the first group ID
+        } else {
+          setGroupId(null);
+        }
+      } catch (error) {
+        console.error('Error parsing group ID:', error);
+        setGroupId(null);
+      }
+    }
+  }, []);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -39,125 +56,92 @@ const EventDetails = () => {
         ...prevErrors,
         file: '',
       }));
-      setFile(selectedFile);
+      setFile(selectedFile); // Properly set the file in state
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-
-    if (name === 'approach' && value.trim() === '') {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        approach: 'Solution approach is required.',
-      }));
-    } else if (name === 'tools' && value.trim() === '') {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        tools: 'Description of tools and technologies is required.',
-      }));
-    } else {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: '',
-      }));
-    }
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.approach.trim()) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        approach: 'Solution approach is required.',
-      }));
-    }
-    if (!formData.tools.trim()) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        tools: 'Description of tools and technologies is required.',
-      }));
-    }
     if (!file) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         file: 'Please upload a valid solution file.',
       }));
+      return;
     }
 
-    if (!errors.approach && !errors.tools && !errors.file && file) {
-      alert('File submitted successfully!');
-      setFormData({ approach: '', tools: '' });
-      setFile(null);
+    if (!errors.file) {
+      const jwt = localStorage.getItem("token");
+      console.log("JWT token:", jwt);
+
+      if (!jwt) {
+        console.error('No JWT found in local storage');
+        navigate('/login');
+        return;
+      }
+
+      if (!groupId) {
+        console.error('No group ID found.');
+        return;
+      }
+
+      // Create FormData object to send with the request
+      const formDataToSend = new FormData();
+      formDataToSend.append('submission', file); // Append the file with key 'submission'
+
+      try {
+        const response = await axios.post(
+          `http://load-balancer-hackathon-385661405.us-east-1.elb.amazonaws.com/api/v1/group/file/upload?groupId=${groupId}`,
+          formDataToSend,
+          {
+            headers: {
+              'X_H_ACCESS_KEY_HEADER':  jwt, // Use Bearer token for JWT
+            },
+          }
+        );
+        navigate("/")
+        toast.success('Submission uploaded successfully!');
+        console.log("Response:", response);
+
+        // Reset form data after successful submission
+        setFile(null);
+      } catch (error) {
+        console.error('Error submitting file:', error);
+        toast.error('Failed to submit the file.');
+      }
     }
   };
-  const handleAddGroupClick = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleViewGroupClick =() => {
-    setIsModalOpen(true);
-  }
-
-  const handleViewCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
+  
+  const handleAddGroupClick = () => setActiveModal('addGroup');
+  const handleViewGroupClick = () => setActiveModal('viewGroup');
+  const handleCloseModal = () => setActiveModal(null);
 
   return (
     <div className="event-details">
       <div className="header">
         <h2>Event Details</h2>
         <div className="buttons">
-        <button onClick={handleAddGroupClick}>Add Group Members</button>
-        <button onClick={handleViewGroupClick}>View Group Members</button>
-        {/* <button onClick={() => navigate('/list-member')}>View Members</button> */}
+          <button onClick={handleAddGroupClick}>Add Group Members</button>
+          <button onClick={handleViewGroupClick}>View Group Members</button>
         </div>
       </div>
-      <p>Please answer the following questions:</p>
+      <br />
+     
       <form onSubmit={handleSubmit}>
-        <div className="question">
-          <label>Question 1: What is your solution approach?</label>
-          <textarea
-            rows="4"
-            name="approach"
-            value={formData.approach}
-            onChange={handleChange}
-            required
-          />
-          {errors.approach && <span className="error">{errors.approach}</span>}
-        </div>
-        <div className="question">
-          <label>Question 2: Describe the tools and technologies used:</label>
-          <textarea
-            rows="4"
-            name="tools"
-            value={formData.tools}
-            onChange={handleChange}
-            required
-          />
-          {errors.tools && <span className="error">{errors.tools}</span>}
-        </div>
         <div className="file-upload">
           <label htmlFor="file">Upload Your Solution File:</label>
           <input type="file" id="file" onChange={handleFileChange} required />
           {errors.file && <span className="error">{errors.file}</span>}
         </div>
+        
         <button type="submit">Submit</button>
       </form>
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+      
+      <Modal isOpen={activeModal === 'addGroup'} onClose={handleCloseModal}>
         <AddGroup />
       </Modal>
-      <Modal isOpen={isModalOpen} onClose={handleViewCloseModal}>
+      <Modal isOpen={activeModal === 'viewGroup'} onClose={handleCloseModal}>
         <GroupMembers />
       </Modal>
     </div>

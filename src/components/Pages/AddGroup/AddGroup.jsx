@@ -1,26 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AddGroup.css';
+import * as Constants from '../../../helpers/constants';
 
 const AddGroup = () => {
-  const [member, setMember] = useState({ name: '', email: '', role: '' });
-  const [errors, setErrors] = useState({ name: '', email: '', role: '' });
+  const [members, setMembers] = useState([{ name: '', email: '', role: '' }]);
+  const [errors, setErrors] = useState([{ name: '', email: '', role: '' }]);
+  const [groupName, setGroupName] = useState('official group');
+  const [isLoading, setIsLoading] = useState(false);
+  const [groupFiles, setGroupFiles] = useState([]);
+  const [groupId, setGroupId] = useState(null);
 
-  // Regular expressions for validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const nameRegex = /^[A-Za-z\s]+$/;
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setMember((prevMember) => ({
-      ...prevMember,
-      [name]: value,
-    }));
+  useEffect(() => {
+    const storedGroupId = localStorage.getItem('groupid');
+    if (storedGroupId) {
+      try {
+        const parsedGroupId = JSON.parse(storedGroupId);
+        if (Array.isArray(parsedGroupId) && parsedGroupId.length > 0) {
+          setGroupId(parsedGroupId[0]); // Set only the first group ID
+          console.log("groupiddd", parsedGroupId[0]); // Log the first group ID
+        } else {
+          setGroupId(null); // Handle case if parsedGroupId is not an array or is empty
+        }
+      } catch (error) {
+        console.error('Error parsing group ID:', error);
+        setGroupId(null);
+      }
+    }
+  }, []);
+  
 
-    // Validate as user types
-    validateField(name, value);
+  const handleChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedMembers = [...members];
+    updatedMembers[index][name] = value;
+
+    validateField(index, name, value);
+    setMembers(updatedMembers);
   };
 
-  const validateField = (name, value) => {
+  const validateField = (index, name, value) => {
     let error = '';
 
     switch (name) {
@@ -29,8 +50,6 @@ const AddGroup = () => {
           error = 'Name is required';
         } else if (!nameRegex.test(value)) {
           error = 'Name can only contain alphabets';
-        } else {
-          error = '';
         }
         break;
       case 'email':
@@ -38,85 +57,150 @@ const AddGroup = () => {
           error = 'Email is required';
         } else if (!emailRegex.test(value)) {
           error = 'Enter a valid email address';
-        } else {
-          error = '';
         }
         break;
       case 'role':
         if (!value.trim()) {
           error = 'Role is required';
-        } else {
-          error = '';
         }
         break;
       default:
         break;
     }
 
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: error,
-    }));
+    const updatedErrors = [...errors];
+    updatedErrors[index][name] = error;
+    setErrors(updatedErrors);
   };
 
-  const handleSubmit = (e) => {
+  const handleAddMember = () => {
+    setMembers([...members, { name: '', email: '', role: '' }]);
+    setErrors([...errors, { name: '', email: '', role: '' }]);
+  };
+
+  const handleRemoveMember = (index) => {
+    const updatedMembers = members.filter((_, i) => i !== index);
+    const updatedErrors = errors.filter((_, i) => i !== index);
+    setMembers(updatedMembers);
+    setErrors(updatedErrors);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate all fields before submitting
-    const { name, email, role } = member;
-    if (!name || !email || !role || errors.name || errors.email || errors.role) {
-      validateField('name', name);
-      validateField('email', email);
-      validateField('role', role);
+    const validationErrors = members.map((member, index) => {
+      return {
+        name: !member.name || errors[index].name,
+        email: !member.email || errors[index].email,
+        role: !member.role || errors[index].role,
+      };
+    });
+
+    if (validationErrors.some(err => Object.values(err).some(Boolean))) {
+      validationErrors.forEach((_, index) => {
+        validateField(index, 'name', members[index].name);
+        validateField(index, 'email', members[index].email);
+        validateField(index, 'role', members[index].role);
+      });
       return;
     }
 
-    console.log('Member added:', member);
-    setMember({ name: '', email: '', role: '' });
-    setErrors({ name: '', email: '', role: '' });
+    setIsLoading(true);
+
+    const requestBody = {
+      group_name: groupName,
+      members,
+      group_files: groupFiles,
+    };
+
+    const jwt = localStorage.getItem("token");
+    console.log('JWT:', jwt);
+
+    if (!jwt || !groupId) {
+      console.error('JWT or group ID is missing');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://load-balancer-hackathon-385661405.us-east-1.elb.amazonaws.com/api/v1/group/members?groupId=${groupId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X_H_ACCESS_KEY_HEADER': jwt,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error response:', errorData);
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log('Group updated:', data);
+
+      setMembers([{ name: '', email: '', role: '' }]);
+      setErrors([{ name: '', email: '', role: '' }]);
+      setGroupFiles([]);
+    } catch (error) {
+      console.error('Error updating group:', error);
+    } finally {
+      setIsLoading(false);
+    }
+
+    console.log('Request Body:', JSON.stringify(requestBody));
   };
 
   return (
     <div className="add-member-container">
-      <h2>Add Group Member</h2>
+      <h2>Add Group Members</h2>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name:</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={member.name}
-          onChange={handleChange}
-          placeholder="Enter member's name"
-          required
-        />
-        {errors.name && <span className="error">{errors.name}</span>}
+        {members.map((member, index) => (
+          <div key={index} className="member-form">
+            <label htmlFor={`name-${index}`}>Name:</label>
+            <input
+              type="text"
+              id={`name-${index}`}
+              name="name"
+              value={member.name}
+              onChange={(e) => handleChange(index, e)}
+              placeholder="Enter member's name"
+              required
+            />
+            {errors[index].name && <span className="error">{errors[index].name}</span>}
 
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={member.email}
-          onChange={handleChange}
-          placeholder="Enter member's email"
-          required
-        />
-        {errors.email && <span className="error">{errors.email}</span>}
+            <label htmlFor={`email-${index}`}>Email:</label>
+            <input
+              type="email"
+              id={`email-${index}`}
+              name="email"
+              value={member.email}
+              onChange={(e) => handleChange(index, e)}
+              placeholder="Enter member's email"
+              required
+            />
+            {errors[index].email && <span className="error">{errors[index].email}</span>}
 
-        <label htmlFor="role">Role:</label>
-        <input
-          type="text"
-          id="role"
-          name="role"
-          value={member.role}
-          onChange={handleChange}
-          placeholder="Enter member's role"
-          required
-        />
-        {errors.role && <span className="error">{errors.role}</span>}
+            <label htmlFor={`role-${index}`}>Role:</label>
+            <input
+              type="text"
+              id={`role-${index}`}
+              name="role"
+              value={member.role}
+              onChange={(e) => handleChange(index, e)}
+              placeholder="Enter member's role"
+              required
+            />
+            {errors[index].role && <span className="error">{errors[index].role}</span>}
 
-        <button type="submit">Add Member</button>
+          </div>
+        ))}
+        {/* <button type="button" onClick={handleAddMember}>Add Another Member</button> */}
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Updating...' : 'Add Group Members'}
+        </button>
       </form>
     </div>
   );

@@ -45,6 +45,7 @@ const Login = () => {
       // Proceed with login API call
       try {
         const response = await fetch(Constants.BACKEND_IP + '/api/v1/authenticate/login', {
+        // const response = await fetch('http://localhost:8080/api/v1/authenticate/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -58,6 +59,7 @@ const Login = () => {
           toast.success(data.message);
           // Store the token if needed
           localStorage.setItem('token', data.token);
+          localStorage.setItem('groupid', JSON.stringify(data.group_ids));
           navigate("/events")
         } else {
           toast.error(data.message || 'Login failed. Please try again.');
