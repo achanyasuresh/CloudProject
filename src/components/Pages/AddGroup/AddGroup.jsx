@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './AddGroup.css';
 import * as Constants from '../../../helpers/constants';
+import { toast, ToastContainer } from 'react-toastify'; // Import toast and ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS for toast notifications
 
 const AddGroup = () => {
   const [members, setMembers] = useState([{ name: '', email: '', role: '' }]);
@@ -30,7 +32,6 @@ const AddGroup = () => {
       }
     }
   }, []);
-  
 
   const handleChange = (index, e) => {
     const { name, value } = e.target;
@@ -140,12 +141,15 @@ const AddGroup = () => {
 
       const data = await response.json();
       console.log('Group updated:', data);
+      toast.success('Group members added successfully!');
+      // Show success toast
 
       setMembers([{ name: '', email: '', role: '' }]);
       setErrors([{ name: '', email: '', role: '' }]);
       setGroupFiles([]);
     } catch (error) {
       console.error('Error updating group:', error);
+      toast.error('Failed to add group members.'); // Show error toast
     } finally {
       setIsLoading(false);
     }
@@ -155,6 +159,7 @@ const AddGroup = () => {
 
   return (
     <div className="add-member-container">
+      <ToastContainer /> {/* Add the ToastContainer for toast notifications */}
       <h2>Add Group Members</h2>
       <form onSubmit={handleSubmit}>
         {members.map((member, index) => (

@@ -1,17 +1,17 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f5f5f5; /* Soft light gray */
     margin: 0;
     padding: 0;
 }
 
 .container {
     max-width: 800px;
-    margin: 20px auto;
+    margin: 30px auto;
     padding: 20px;
-    background: white;
+    background: #ffffff; /* White background for content */
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
 }
 
 header {
@@ -21,22 +21,28 @@ header {
 
 h1 {
     font-size: 2.5em;
-    margin: 0;
+    color: #333; /* Darker text for headers */
 }
 
 .group-info,
 .file-download {
     margin: 20px 0;
+    padding: 15px;
+    background: #f9f9f9; /* Light gray background for sections */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow for sections */
 }
 
 h2 {
     font-size: 1.8em;
     margin-bottom: 10px;
+    color: #007BFF; /* Blue color for headings */
 }
 
 h3 {
     font-size: 1.5em;
     margin-top: 20px;
+    color: #555; /* Dark gray for subheadings */
 }
 
 ul {
@@ -46,11 +52,21 @@ ul {
 
 li {
     margin: 10px 0;
+    padding: 10px;
+    background: #ffffff; /* White background for list items */
+    border: 1px solid #ddd; /* Light border for list items */
+    border-radius: 4px;
+    transition: background 0.3s, transform 0.3s; /* Smooth transition for hover effects */
+}
+
+li:hover {
+    background: #f1f1f1; /* Light gray on hover */
+    transform: scale(1.01); /* Slight scale effect on hover */
 }
 
 a {
     text-decoration: none;
-    color: #007BFF;
+    color: #007BFF; /* Blue links */
 }
 
 a:hover {

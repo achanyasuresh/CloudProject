@@ -5,18 +5,15 @@ import Modal from './Modal';
 import AddGroup from '../AddGroup/AddGroup';
 import GroupMembers from "../GroupMembers/GroupMembers";
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from 'react-toastify';
 
 const EventDetails = () => {
   const navigate = useNavigate();
   const [activeModal, setActiveModal] = useState(null);
   const [groupId, setGroupId] = useState(null);
-  
- 
   const [file, setFile] = useState(null);
-  const [errors, setErrors] = useState({
-    file: '',
-  });
+  const [errors, setErrors] = useState({ file: '' });
 
   useEffect(() => {
     const storedGroupId = localStorage.getItem('groupid');
@@ -24,8 +21,8 @@ const EventDetails = () => {
       try {
         const parsedGroupId = JSON.parse(storedGroupId);
         if (Array.isArray(parsedGroupId) && parsedGroupId.length > 0) {
-          setGroupId(parsedGroupId[0]); // Set only the first group ID
-          console.log("groupId:", parsedGroupId[0]); // Log the first group ID
+          setGroupId(parsedGroupId[0]);
+          console.log("groupId:", parsedGroupId[0]);
         } else {
           setGroupId(null);
         }
@@ -56,7 +53,7 @@ const EventDetails = () => {
         ...prevErrors,
         file: '',
       }));
-      setFile(selectedFile); // Properly set the file in state
+      setFile(selectedFile);
     }
   };
 
@@ -73,8 +70,6 @@ const EventDetails = () => {
 
     if (!errors.file) {
       const jwt = localStorage.getItem("token");
-      console.log("JWT token:", jwt);
-
       if (!jwt) {
         console.error('No JWT found in local storage');
         navigate('/login');
@@ -86,9 +81,8 @@ const EventDetails = () => {
         return;
       }
 
-      // Create FormData object to send with the request
       const formDataToSend = new FormData();
-      formDataToSend.append('submission', file); // Append the file with key 'submission'
+      formDataToSend.append('submission', file);
 
       try {
         const response = await axios.post(
@@ -96,19 +90,22 @@ const EventDetails = () => {
           formDataToSend,
           {
             headers: {
-              'X_H_ACCESS_KEY_HEADER':  jwt, // Use Bearer token for JWT
+              'X_H_ACCESS_KEY_HEADER': jwt,
             },
           }
         );
-        navigate("/")
-        toast.success('Submission uploaded successfully!');
-        console.log("Response:", response);
+
+        console.log("Response: from file submission", response);
+        toast.success('Submission uploaded successfully!'); // Show success toast
 
         // Reset form data after successful submission
         setFile(null);
+        // Navigate after the toast shows
+        setTimeout(() => navigate("/"), 3000); // Adjust the time as needed
+
       } catch (error) {
         console.error('Error submitting file:', error);
-        toast.error('Failed to submit the file.');
+        toast.error('Failed to submit the file.'); // Show error toast
       }
     }
   };
@@ -119,6 +116,7 @@ const EventDetails = () => {
 
   return (
     <div className="event-details">
+      <ToastContainer /> {/* Add the ToastContainer for toast notifications */}
       <div className="header">
         <h2>Event Details</h2>
         <div className="buttons">
@@ -139,7 +137,7 @@ const EventDetails = () => {
       </form>
       
       <Modal isOpen={activeModal === 'addGroup'} onClose={handleCloseModal}>
-        <AddGroup />
+        <AddGroup onClose={handleCloseModal} />
       </Modal>
       <Modal isOpen={activeModal === 'viewGroup'} onClose={handleCloseModal}>
         <GroupMembers />

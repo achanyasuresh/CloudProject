@@ -3,71 +3,102 @@ import * as Constants from '../../../helpers/constants';
 import './Group.css';
 
 const Group = () => {
+  const [groupId, setGroupId] = useState(null); // State to store group ID
+  const [groupDetails, setGroupDetails] = useState({
+    teamName: 'test',
+    members: [],
+    group_files: []
+  });
 
-    const [groupDetails, setGroupDetails] = useState({
-        teamName: 'test',
-        members: [],
-        group_files: []
-    });
+  useEffect(() => {
+    const storedGroupId = localStorage.getItem('groupid');
+    console.log("id from group page", storedGroupId);
+    if (storedGroupId) {
+      try {
+        const parsedGroupId = JSON.parse(storedGroupId);
+        if (Array.isArray(parsedGroupId) && parsedGroupId.length > 0) {
+          setGroupId(parsedGroupId[0]); // Set only the first group ID
+        } else {
+          setGroupId(null);
+        }
+      } catch (error) {
+        console.error('Error parsing group ID:', error);
+        setGroupId(null);
+      }
+    }
+  }, []);
 
-    useEffect(() => async function() {
-        // Simulating an API call
-            console.log("fetching group info");
-            // Replace with your API endpoint
-            try {
-                const response = await fetch('' + Constants.BACKEND_IP + '/api/v1/group?groupId=8cb5f266-0225-4c18-9dfb-49d18e4ce261', {
-                    headers: {
-                        "X_H_ACCESS_KEY_HEADER": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3Mjc0Mjc2MTR9.4ZfNFNP4-87RDnvdhbD0o5eUzYjCvcRAvdYppu3jJGY"
-                    }
-                });
-                const data = await response.json();
-                console.log("The response: " + JSON.stringify(data));
-                setGroupDetails(data[0]);
-            } catch (error) {
-                console.log("The error: " + error.stack);
-            }
-        }, []);
+  useEffect(() => {
+    const fetchGroupInfo = async () => {
+      // Only fetch group info if groupId is available
+      if (!groupId) {
+        console.log("Group ID is not available.");
+        return; // Exit if groupId is null
+      }
 
+      console.log("fetching group info");
+      const jwt = localStorage.getItem('token'); // Get JWT from local storage
 
-    return (
-        <div className="container">
-            <header>
-                <h1>Hackathon Group Details</h1>
-            </header>
+      try {
+        const response = await fetch(`${Constants.BACKEND_IP}/api/v1/group?groupId=${groupId}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${jwt}`, // Include the token in the Authorization header
+            "X_H_ACCESS_KEY_HEADER": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3Mjc0Mjc2MTR9.4ZfNFNP4-87RDnvdhbD0o5eUzYjCvcRAvdYppu3jJGY"
+          }
+        });
 
-            <section className="group-info">
-                <h2>Team Name: <span id="team-name">Innovators</span></h2>
-                <h3>Members:</h3>
-                <ul id="members-list">
-                    {/* <li>
-                        {groupDetails.teamName}
-                        {groupDetails.members}
-                        {groupDetails.members.length}
-                    </li> */}
-                    {groupDetails.members.length > 0 ? (
-                        groupDetails.members.map((member, index) => (
-                            <li key={index}>{member.user_name}</li>
-                        ))
-                    ) : (
-                        <li>Loading members...</li>
-                    )}
-                </ul>
-            </section>
+        const data = await response.json();
+        console.log("The response: " + JSON.stringify(data));
+        if (data && data.length > 0) {
+          setGroupDetails(data[0]); // Set the group details if data is valid
+        } else {
+          console.error("No group details found for the given ID.");
+        }
+      } catch (error) {
+        console.error("The error: " + error);
+      }
+    };
 
-            <section className="file-download">
-                <h3>Uploaded Files:</h3>
-                <ul id="file-list">
-                {groupDetails.group_files.length > 0 ? (
-                        groupDetails.group_files.map((file, index) => (
-                            <li key={index}>{file.file_name}</li>
-                        ))
-                    ) : (
-                        <li>Loading files...</li>
-                    )}
-                </ul>
-            </section>
-        </div>
-    );
+    fetchGroupInfo(); // Call the function to fetch group info
+  }, [groupId]); // Dependency on groupId, will run when groupId changes
+
+  return (
+    <div className="container">
+      <header>
+        <h1>Hackathon Group Details</h1>
+      </header>
+
+      <section className="group-info">
+        <h2>Team Name: <span id="team-name">{groupDetails.group_name}</span></h2>
+        <h3>Members:</h3>
+        <ul id="members-list">
+        {groupDetails.members.length > 0 ? (
+            groupDetails.members.flat().map((member, index) => ( // Flatten the nested array
+              <li key={index}>
+                {member.name} - {member.email} ({member.role})
+              </li>
+            ))
+          ) : (
+            <li>Loading members...</li>
+          )}
+        </ul>
+      </section>
+
+      <section className="file-download">
+        <h3>Uploaded Files:</h3>
+        <ul id="file-list">
+          {groupDetails.group_files.length > 0 ? (
+            groupDetails.group_files.map((file, index) => (
+              <li key={index}>{file.file_name}</li>
+            ))
+          ) : (
+            <li>Loading files...</li>
+          )}
+        </ul>
+      </section>
+    </div>
+  );
 };
 
 export default Group;
