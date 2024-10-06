@@ -11,7 +11,8 @@ const Navbar = () => {
   const isLoggedIn = localStorage.getItem('token') !== null;
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove token from local storage
+    localStorage.removeItem('token'); 
+    localStorage.removeItem('groupid')
     navigate('/'); // Redirect to login page
   };
 

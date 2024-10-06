@@ -3,30 +3,14 @@ import * as Constants from '../../../helpers/constants';
 import './Group.css';
 
 const Group = () => {
-  const [groupId, setGroupId] = useState(null); // State to store group ID
   const [groupDetails, setGroupDetails] = useState({
     teamName: 'test',
     members: [],
     group_files: []
   });
 
-  useEffect(() => {
-    const storedGroupId = localStorage.getItem('groupid');
-    console.log("id from group page", storedGroupId);
-    if (storedGroupId) {
-      try {
-        const parsedGroupId = JSON.parse(storedGroupId);
-        if (Array.isArray(parsedGroupId) && parsedGroupId.length > 0) {
-          setGroupId(parsedGroupId[0]); // Set only the first group ID
-        } else {
-          setGroupId(null);
-        }
-      } catch (error) {
-        console.error('Error parsing group ID:', error);
-        setGroupId(null);
-      }
-    }
-  }, []);
+
+  const groupId = localStorage.getItem('groupid');
 
   useEffect(() => {
     const fetchGroupInfo = async () => {

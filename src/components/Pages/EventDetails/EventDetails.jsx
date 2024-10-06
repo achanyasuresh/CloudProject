@@ -11,27 +11,11 @@ import { toast, ToastContainer } from 'react-toastify';
 const EventDetails = () => {
   const navigate = useNavigate();
   const [activeModal, setActiveModal] = useState(null);
-  const [groupId, setGroupId] = useState(null);
   const [file, setFile] = useState(null);
   const [errors, setErrors] = useState({ file: '' });
 
-  useEffect(() => {
-    const storedGroupId = localStorage.getItem('groupid');
-    if (storedGroupId) {
-      try {
-        const parsedGroupId = JSON.parse(storedGroupId);
-        if (Array.isArray(parsedGroupId) && parsedGroupId.length > 0) {
-          setGroupId(parsedGroupId[0]);
-          console.log("groupId:", parsedGroupId[0]);
-        } else {
-          setGroupId(null);
-        }
-      } catch (error) {
-        console.error('Error parsing group ID:', error);
-        setGroupId(null);
-      }
-    }
-  }, []);
+  const groupId = localStorage.getItem('groupid');
+
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
