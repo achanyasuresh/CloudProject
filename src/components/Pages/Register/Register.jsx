@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import * as Constants from '../../../helpers/constants';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [formValues, setFormValues] = useState({ username: '', email: '', password: '' });
   const [errors, setErrors] = useState({ username: '', email: '', password: '' });
   const [registerMessage, setRegisterMessage] = useState('');
+  const navigate = useNavigate()
 
   // Regular expressions for validation
   const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -81,6 +83,8 @@ const Register = () => {
         // Clear form fields
         setFormValues({ username: '', email: '', password: '' });
         setErrors({ username: '', email: '', password: '' });
+        localStorage.setItem('groupid',data.group_id);
+        navigate("/login")
       } else {
         setRegisterMessage(data.message || 'Registration failed. Please try again.');
       }

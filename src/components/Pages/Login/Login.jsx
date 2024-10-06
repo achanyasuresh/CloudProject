@@ -59,7 +59,6 @@ const Login = () => {
           toast.success(data.message);
           // Store the token if needed
           localStorage.setItem('token', data.token);
-          localStorage.setItem('groupid', JSON.stringify(data.group_ids));
           navigate("/events")
         } else {
           toast.error(data.message || 'Login failed. Please try again.');

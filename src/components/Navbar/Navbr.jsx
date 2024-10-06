@@ -26,7 +26,7 @@ const Navbar = () => {
       <div className="navbar-right">
         {isLoggedIn ? (
           <div className="profile-logout">
-            <AccountCircleIcon className="profile-icon" />
+            {/* <AccountCircleIcon className="profile-icon" /> */}
             <LogoutIcon className="logout-icon" onClick={handleLogout} />
           </div>
         ) : (

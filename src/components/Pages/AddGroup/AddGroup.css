@@ -1,64 +1,8 @@
-/* src/components/AddGroupMember.css
+/* AddGroup.css */
 
 .add-member-container {
-    width: 100%;
-    max-width: 450px;
-    margin: 20px auto;
-    padding: 25px;
-    background-color: #e6f2ff;
-    border-radius: 10px;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  .add-member-container h2 {
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 26px;
-    color: #333;
-  }
-  
-  .add-member-container form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .add-member-container label {
-    margin-bottom: 6px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .add-member-container input {
-    padding: 10px;
-    margin-bottom: 18px;
-    border: 1px solid #b3d9ff;
-    border-radius: 5px;
-  }
-  
-  .add-member-container button {
-    padding: 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .add-member-container button:hover {
-    background-color: #0056b3;
-  }
-  .error {
-    color: red;
-    font-size: 0.9rem;
-    margin-top: 5px;
-  } */
-   /* AddGroup.css */
-
-.add-member-container {
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 600px; /* Maximum width for larger screens */
+  margin: 0 auto; /* Center the container */
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -89,7 +33,7 @@ label {
 
 input[type="text"],
 input[type="email"] {
-  width: calc(100% - 10px);
+  width: calc(100% - 10px); /* Full width minus padding */
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -99,8 +43,8 @@ input[type="email"] {
 
 input[type="text"]:focus,
 input[type="email"]:focus {
-  border-color: #007bff;
-  outline: none;
+  border-color: #007bff; /* Highlight border on focus */
+  outline: none; /* Remove default outline */
 }
 
 .error {
@@ -109,7 +53,7 @@ input[type="email"]:focus {
 }
 
 button {
-  background-color: #007bff;
+  background-color: #007bff; /* Main button color */
   color: white;
   border: none;
   padding: 10px 15px;
@@ -117,15 +61,16 @@ button {
   cursor: pointer;
   font-size: 14px;
   margin-top: 10px;
+  transition: background-color 0.3s ease; /* Smooth transition */
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #0056b3; /* Darker shade on hover */
 }
 
 button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
+  background-color: #cccccc; /* Grey when disabled */
+  cursor: not-allowed; /* Not-allowed cursor */
 }
 
 button[type="button"] {
@@ -133,21 +78,33 @@ button[type="button"] {
 }
 
 button[type="button"]:hover {
-  background-color: #c82333;
+  background-color: #c82333; /* Darker red on hover */
 }
 
-@media (max-width: 600px) {
+/* Responsive styles */
+@media (max-width: 768px) {
   .add-member-container {
-      padding: 15px;
+      padding: 15px; /* Reduce padding on smaller screens */
   }
 
   input[type="text"],
   input[type="email"] {
-      width: calc(100% - 15px);
+      width: calc(100% - 15px); /* Full width minus some padding */
   }
 
   button {
-      width: 100%;
-      margin-top: 10px;
+      width: 100%; /* Full width for buttons */
+      margin-top: 10px; /* Add margin at the top */
+  }
+}
+
+/* Additional styles for smaller screens */
+@media (max-width: 480px) {
+  h2 {
+      font-size: 24px; /* Smaller heading size */
+  }
+
+  button {
+      padding: 8px; /* Reduce button padding */
   }
 }

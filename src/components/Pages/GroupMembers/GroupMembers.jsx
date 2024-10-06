@@ -232,26 +232,11 @@ const GroupMembers = () => {
   const [errors, setErrors] = useState({ name: '', email: '', role: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [groupId, setGroupId] = useState(null); // State to store group ID
 
   // Fetch group ID from local storage
-  useEffect(() => {
-    const storedGroupId = localStorage.getItem('groupid');
-    if (storedGroupId) {
-      try {
-        const parsedGroupId = JSON.parse(storedGroupId);
-        if (Array.isArray(parsedGroupId) && parsedGroupId.length > 0) {
-          setGroupId(parsedGroupId[0]); // Set only the first group ID
-        } else {
-          setGroupId(null);
-        }
-      } catch (error) {
-        console.error('Error parsing group ID:', error);
-        setGroupId(null);
-      }
-    }
-  }, []);
 
+
+  const groupId = localStorage.getItem('groupid');
   // Fetch group members from the API
   useEffect(() => {
     const fetchMembers = async () => {

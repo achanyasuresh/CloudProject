@@ -1,58 +1,81 @@
-
 .events-list {
-    width: 80%;
-    margin: 20px auto;
-    text-align: center;
-  }
-  
-  .events-list h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  .event-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
+  width: 80%;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.events-list h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.event-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.event-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px;
+  width: 300px; /* Base width for event cards */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.event-card:hover {
+  transform: scale(1.05);
+}
+
+.event-card h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.event-card p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.event-link {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.event-link:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
   .event-card {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 10px;
-    width: 300px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+      width: 90%; /* Full width on smaller screens */
   }
-  
-  .event-card:hover {
-    transform: scale(1.05);
+}
+
+@media (max-width: 480px) {
+  .events-list h2 {
+      font-size: 20px; /* Smaller heading for small screens */
   }
-  
+
   .event-card h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
+      font-size: 18px; /* Smaller heading for event cards */
   }
-  
+
   .event-card p {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 15px;
+      font-size: 14px; /* Smaller text for event descriptions */
   }
-  
+
   .event-link {
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+      padding: 8px 12px; /* Smaller button padding */
   }
-  
-  .event-link:hover {
-    background-color: #0056b3;
-  }
-  
+}

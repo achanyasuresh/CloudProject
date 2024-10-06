@@ -72,3 +72,50 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2em; /* Smaller heading on medium screens */
+    }
+
+    .container {
+        padding: 15px; /* Reduced padding on smaller screens */
+    }
+
+    h2 {
+        font-size: 1.5em; /* Smaller subheadings */
+    }
+
+    h3 {
+        font-size: 1.3em; /* Smaller sub-subheadings */
+    }
+
+    li {
+        padding: 8px; /* Smaller padding for list items */
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8em; /* Even smaller heading for small screens */
+    }
+
+    .container {
+        margin: 15px; /* Reduced margin */
+        padding: 10px; /* Further reduced padding */
+    }
+
+    h2 {
+        font-size: 1.3em; /* Smaller subheadings */
+    }
+
+    h3 {
+        font-size: 1.2em; /* Smaller sub-subheadings */
+    }
+
+    li {
+        margin: 5px 0; /* Reduced margin for list items */
+        padding: 5px; /* Reduced padding for list items */
+    }
+}

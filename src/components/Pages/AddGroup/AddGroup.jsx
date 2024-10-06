@@ -10,29 +10,15 @@ const AddGroup = () => {
   const [groupName, setGroupName] = useState('official group');
   const [isLoading, setIsLoading] = useState(false);
   const [groupFiles, setGroupFiles] = useState([]);
-  const [groupId, setGroupId] = useState(null);
+  // const [groupId, setGroupId] = useState(null);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const nameRegex = /^[A-Za-z\s]+$/;
 
-  useEffect(() => {
-    const storedGroupId = localStorage.getItem('groupid');
-    if (storedGroupId) {
-      try {
-        const parsedGroupId = JSON.parse(storedGroupId);
-        if (Array.isArray(parsedGroupId) && parsedGroupId.length > 0) {
-          setGroupId(parsedGroupId[0]); // Set only the first group ID
-          console.log("groupiddd", parsedGroupId[0]); // Log the first group ID
-        } else {
-          setGroupId(null); // Handle case if parsedGroupId is not an array or is empty
-        }
-      } catch (error) {
-        console.error('Error parsing group ID:', error);
-        setGroupId(null);
-      }
-    }
-  }, []);
+    const groupId = localStorage.getItem('groupid');
+    
 
+  console.log("grrrrr", groupId)
   const handleChange = (index, e) => {
     const { name, value } = e.target;
     const updatedMembers = [...members];

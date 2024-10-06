@@ -89,8 +89,8 @@ const Group = () => {
         <h3>Uploaded Files:</h3>
         <ul id="file-list">
           {groupDetails?.group_files?.length > 0 ? (
-            groupDetails?.group_files?.map((file, index) => (
-              <li key={index}>{file?.file_name}</li>
+            groupDetails.group_files.map((file, index) => (
+              <li key={index}>{file.file_name}</li>
             ))
           ) : (
             <li>Loading files...</li>
